@@ -31,7 +31,7 @@
 			<p v-if="state === states.ENABLED">
 				<L10n text="Your account was successfully configured to receive authentication codes via Email to {emailAddress}."
 					:options="{emailAddress: emailAddress}" />
-				<button @click="disable">
+				<button v-if="!isEnforced"  @click="disable">
 					<L10n text="Disable" />
 				</button>
 			</p>
@@ -68,6 +68,7 @@ export default {
 			isAvailable: true,
 			confirmationCode: '',
 			verificationError: false,
+			isEnforced:false,
 		}
 	},
 	mounted: function() {
@@ -75,6 +76,7 @@ export default {
 		const state = loadState('twofactor_email', 'state')
 		this.state = state.state
 		this.emailAddress = state.emailAddress
+		this.isEnforced = state.isEnforced
 	},
 	methods: {
 		enable: function() {

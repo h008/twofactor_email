@@ -21,12 +21,16 @@ class State implements JsonSerializable {
 	/** @var string|null */
 	private $authenticationCode;
 
-	public function __construct(IUser $user,
-								int $state,
-								string $authenticationCode = null) {
+	public function __construct(
+			IUser $user,
+			int $state,
+			string $authenticationCode = null,
+			bool $isEnforced = false,
+		) {
 		$this->user = $user;
 		$this->state = $state;
 		$this->authenticationCode = $authenticationCode;
+		$this->isEnforced = $isEnforced;
 	}
 
 	public static function verifying(IUser $user,
@@ -49,7 +53,7 @@ class State implements JsonSerializable {
 		return new State(
 			$this->user,
 			Email::STATE_ENABLED,
-			$this->authenticationCode
+			$this->authenticationCode,
 		);
 	}
 
@@ -58,6 +62,12 @@ class State implements JsonSerializable {
 	 */
 	public function getUser(): IUser {
 		return $this->user;
+	}
+	/**
+	 * @return bool
+	 */
+	public function getIsEnforced():bool {
+		return $this->isEnforced;
 	}
 
 	/**
@@ -79,12 +89,14 @@ class State implements JsonSerializable {
 			return [
 				'state' => $this->state,
 				'emailAddress' => '',
+				'isEnforced' =>$this->isEnforced,
 			];
 		}
 
 		return [
 			'state' => $this->state,
 			'emailAddress' => EmailMask::maskEmail($this->user->getEMailAddress()),
+			'isEnforced' =>$this->isEnforced,
 		];
 	}
 }

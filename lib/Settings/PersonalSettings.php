@@ -46,6 +46,7 @@ class PersonalSettings implements IPersonalProviderSettings {
 		$this->initialStateService = $initialStateService;
 		$this->state = $state;
 		$this->available = $available;
+		//$this->is_enforcement = $state->isEnforcement();
 	}
 
 	/**
@@ -54,6 +55,7 @@ class PersonalSettings implements IPersonalProviderSettings {
 	 * @since 15.0.0
 	 */
 	public function getBody(): Template {
+		//$this->initialStateService->provideInitialState(Applocation::APP_NAME, 'isEnforcement',$this->is_enforcement);
 		$this->initialStateService->provideInitialState(Application::APP_NAME, 'available', $this->available);
 		$this->initialStateService->provideInitialState(Application::APP_NAME, 'state', $this->state);
 		return new Template('twofactor_email', 'personal_settings');
